@@ -375,7 +375,7 @@ export function suggestStrategy(from: string, to: string) {
   return null;
 }
 
-export function applyStrategy(version: string | null, strategy: string) {
+export function applyStrategy(version: string | null, strategy: string, preid?: string | undefined) {
   if (semver.valid(strategy))
     return strategy;
 
@@ -384,7 +384,7 @@ export function applyStrategy(version: string | null, strategy: string) {
   if (!semver.valid(version))
     throw new UsageError(`Cannot apply the release strategy "${strategy}" on a non-semver version (${version})`);
 
-  const nextVersion = semver.inc(version, strategy as any);
+  const nextVersion = semver.inc(version, strategy as any, preid);
   if (nextVersion === null)
     throw new UsageError(`Cannot apply the release strategy "${strategy}" on the specified version (${version})`);
 

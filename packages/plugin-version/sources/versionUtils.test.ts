@@ -25,5 +25,11 @@ describe(`versionUtils`, () => {
       expect(versionUtils.applyStrategy(`1.2.3`, `preminor`)).toEqual(`1.3.0-0`);
       expect(versionUtils.applyStrategy(`1.2.3`, `premajor`)).toEqual(`2.0.0-0`);
     });
+
+    it(`should apply prerelease with a prerelease id`, () => {
+      expect(versionUtils.applyStrategy(`0.5.5`, `prerelease`, `beta`)).toEqual(`0.5.6-beta.0`);
+      expect(versionUtils.applyStrategy(`12.12.12-beta.6`, `prerelease`, `beta`)).toEqual(`12.12.12-beta.7`);
+      expect(versionUtils.applyStrategy(`1.2.3-beta.2`, `prerelease`, `alpha`)).toEqual(`1.2.3-alpha.0`);
+    });
   });
 });
