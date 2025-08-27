@@ -47,6 +47,10 @@ export default class VersionCommand extends BaseCommand {
 
   strategy = Option.String();
 
+  preid = Option.String(`--preid`, {
+    description: `Apply prerelease id`,
+  });
+
   async execute() {
     const configuration = await Configuration.find(this.context.cwd, this.context.plugins);
     const {project, workspace} = await Project.find(configuration, this.context.cwd);
@@ -96,7 +100,7 @@ export default class VersionCommand extends BaseCommand {
       const storedVersion = releases.get(workspace);
 
       if (typeof storedVersion !== `undefined` && releaseStrategy !== versionUtils.Decision.DECLINE) {
-        const thisVersion = versionUtils.applyStrategy(workspace.manifest.version, releaseStrategy);
+        const thisVersion = versionUtils.applyStrategy(workspace.manifest.version, releaseStrategy, this.preid);
         if (semver.lt(thisVersion, storedVersion)) {
           throw new UsageError(`Can't bump the version to one that would be lower than the current deferred one (${storedVersion})`);
         }

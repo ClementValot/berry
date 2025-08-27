@@ -125,6 +125,19 @@ describe(`Commands`, () => {
     );
 
     test(
+      `it should apply a prerelease version with a prerelease id`,
+      makeTemporaryEnv({
+        version: `0.5.4`,
+      }, async ({path, run, source}) => {
+        await run(`version`, `prerelease`, `--preid`, `beta`);
+
+        await expect(xfs.readJsonPromise(`${path}/package.json` as PortablePath)).resolves.toMatchObject({
+          version: `0.5.5-beta.0`,
+        });
+      }),
+    );
+
+    test(
       `it shouldn't immediately increase the version number for a workspace when using --deferred`,
       makeTemporaryEnv({
         version: `0.0.0`,
